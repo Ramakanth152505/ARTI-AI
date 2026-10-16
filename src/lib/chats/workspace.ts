@@ -16,21 +16,11 @@
 
 import { isSupabaseConfigured } from './config';
 import { LocalChatRepository } from './persistence/localRepository';
+import { currentScope, WORKSPACE_ID, type WorkspaceScope } from '#lib/shared/scope';
 import type { ChatRepository } from './persistence/repository';
-import type { WorkspaceScope } from './types';
 
-export const WORKSPACE_ID = 'arti-home';
-
-/**
- * The active workspace scope.
- *
- * `userId` stays null: the profile dropdown is a presentation preference, so
- * deriving ownership from it would imply account isolation that does not exist.
- * The boundary is designed to accept a real id here without other changes.
- */
-export function currentScope(userId: string | null = null): WorkspaceScope {
-	return { workspaceId: WORKSPACE_ID, userId };
-}
+export { currentScope, WORKSPACE_ID };
+export type { WorkspaceScope };
 
 /**
  * Selects the persistence implementation.

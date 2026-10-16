@@ -99,15 +99,10 @@ export interface Folder {
 /**
  * The workspace scope a record belongs to.
  *
- * `userId` is null until real authentication exists. It is deliberately NOT
- * derived from the presentation-only profile switcher, because that control is a
- * UI preference and not an identity — deriving it would imply an authorization
- * boundary the application does not yet have.
+ * Re-exported from the shared module so Chats and Images use one identical
+ * definition. `userId` is null until real authentication exists.
  */
-export interface WorkspaceScope {
-	workspaceId: string;
-	userId: string | null;
-}
+export type { WorkspaceScope } from '#lib/shared/scope';
 
 /** Patch accepted by the conversation update call. */
 export interface ConversationPatch {

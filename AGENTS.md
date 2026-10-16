@@ -72,6 +72,31 @@ Note: `.chat-header` sits in its own stacking context (`backdrop-filter`). Its
 children's dropdowns stay above the scroller because the header carries
 `position: relative; z-index: 2`.
 
+## Images module
+
+`/images` is the image workspace: generation + image-focused conversation, prompt
+generation/enhancement, an expandable style library, and generation history. Logic
+lives in `src/lib/images` and its UI in `src/lib/components/Image*.svelte` and
+`ImagesComposer.svelte` / `ImagesWorkspace.svelte`.
+
+- Availability is read from `src/lib/images/config.ts`
+  (`VITE_ARTI_IMAGE_ENDPOINT`, `VITE_ARTI_PROMPT_ENDPOINT`, `VITE_SUPABASE_*`).
+  Unset means generation/enhancement are disabled with honest copy; no request is
+  made and nothing is fabricated.
+- The style catalog is data in `src/lib/images/styles.ts`. Picking a style inserts
+  its template into the composer; an existing prompt is never silently overwritten
+  (Add / Replace / Cancel confirmation). Add categories/styles to the catalog data,
+  not to components.
+- Model seams: `service/imageService.ts` (CLI-task contract in its header comment)
+  and `service/promptService.ts`. Both throw instead of returning canned output.
+- Persistence is `ImageRepository` (`persistence/repository.ts`); the live
+  implementation is browser-local keyed by workspace scope, with a Supabase
+  implementation swappable without touching components. No lifetime generation cap.
+- Shared seams with Chats live in `src/lib/shared/` (`scope.ts`, env + text
+  helpers); `src/lib/chats/types.ts` re-exports `WorkspaceScope` from there.
+
+Commands: `npm run check:images` (puppeteer workspace checks; needs a dev server).
+
 ## Layout targets (verified at 1920x1080)
 
 Sidebar 252px (76px icon rail when collapsed), topbar 66px, composer <=768px wide
