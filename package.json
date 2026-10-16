@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest run",
-		"check:layout": "node scripts/check-layout.mjs"
+		"check:layout": "node scripts/check-layout.mjs",
+		"check:images": "node scripts/check-images.mjs"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^8.0.0",

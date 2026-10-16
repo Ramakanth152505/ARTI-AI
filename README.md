@@ -35,6 +35,36 @@ Until a file exists, the corresponding layer shows a clearly-labelled dark
 fallback rather than a fabricated or broken image, and makes no request for the
 missing file. Paths are declared once in `src/lib/data/brandAssets.ts`.
 
+## Chats module
+
+`/chats` is the conversation workspace. Its logic lives in `src/lib/chats` and its
+UI in `src/lib/components/Chat*.svelte`. Availability is never hard-coded:
+`src/lib/chats/config.ts` reads `VITE_ARTI_CHAT_ENDPOINT` and `VITE_SUPABASE_*`,
+and with neither set the UI shows honest "not configured" states and makes no
+request.
+
+## Images module
+
+`/images` is the image workspace: generation from prompts, image-focused
+conversations, prompt generation/enhancement, an expandable style library, and
+generation history. Logic lives in `src/lib/images` and its UI in
+`src/lib/components/Image*.svelte` plus `ImagesComposer.svelte`.
+
+- Availability is read from `src/lib/images/config.ts`
+  (`VITE_ARTI_IMAGE_ENDPOINT`, `VITE_ARTI_PROMPT_ENDPOINT`, `VITE_SUPABASE_*`).
+  With none set, generation and enhancement are disabled and the UI says so; no
+  request is made and no image is fabricated.
+- The style catalog is data (`src/lib/images/styles.ts`). Selecting a style
+  inserts its prompt template into the composer; an existing prompt is never
+  overwritten silently — a confirmation offers Add / Replace / Cancel.
+- Generation goes through `service/imageService.ts` (typed seam, CLI-task
+  contract in the header comment) and enhancement through
+  `service/promptService.ts`. Both throw rather than returning canned output.
+- Persistence goes through `ImageRepository` (`persistence/`); the live
+  implementation is browser-local keyed by workspace scope, with a Supabase
+  implementation swappable behind the same interface. No lifetime generation cap
+  is imposed by the UI.
+
 ## Run
 
 ```sh
@@ -47,7 +77,10 @@ Production build and checks:
 ```sh
 npm run build
 npm run preview
-npm run check   # svelte-check + TypeScript
+npm run check          # svelte-check + TypeScript
+npm test               # Vitest unit tests
+npm run check:layout   # layout overflow check (needs a dev server on :5173)
+npm run check:images   # Images workspace checks (needs a dev server)
 ```
 
 ## Project structure

@@ -80,6 +80,13 @@
         --chat-history-width: 288px;
         --chat-context-width: 340px;
         --chat-max-width: 820px;
+        /* Images workspace metrics. The composer keeps the Home composer's width
+           (never narrowed to make it shorter) but a compact height of its own. */
+        --images-history-width: 268px;
+        --images-context-width: 320px;
+        --images-max-width: 768px;
+        --images-composer-min-height: 46px;
+        --images-composer-max-height: 132px;
 
         /* --- Typography --- */
         --font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;

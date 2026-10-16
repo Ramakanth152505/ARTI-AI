@@ -7,6 +7,10 @@
  */
 
 import { NOT_CONNECTED } from '#lib/data/statusMessages';
+import {
+	isChatModelConfigured,
+	isSupabaseConfigured as isSupabaseConfiguredShared
+} from '#lib/shared/env';
 
 /** Surface-level status strings specific to the Chats workspace. */
 export const CHAT_STATUS = {
@@ -29,20 +33,12 @@ export const CHAT_STATUS = {
  * contract described in `service/chatService.ts`.
  */
 export function isModelConfigured(): boolean {
-	const endpoint = import.meta.env.VITE_ARTI_CHAT_ENDPOINT;
-	return typeof endpoint === 'string' && endpoint.trim().length > 0;
+	return isChatModelConfigured();
 }
 
 /** Whether a Supabase project is configured for shared storage. */
 export function isSupabaseConfigured(): boolean {
-	const url = import.meta.env.VITE_SUPABASE_URL;
-	const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-	return (
-		typeof url === 'string' &&
-		url.trim().length > 0 &&
-		typeof anonKey === 'string' &&
-		anonKey.trim().length > 0
-	);
+	return isSupabaseConfiguredShared();
 }
 
 /** Maximum accepted attachment size (25 MB). */
