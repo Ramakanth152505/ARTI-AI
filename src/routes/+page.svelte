@@ -5,24 +5,13 @@
 	import HomeFooter from '#lib/components/HomeFooter.svelte';
 
 	/**
-	 * Home UI. The chat backend is not connected yet, so `onsubmit` and
-	 * `onattach` intentionally surface no success. Composer itself reports the
-	 * honest "not connected" state; attachment selections are acknowledged as
-	 * "not uploaded yet" rather than pretending to work.
+	 * Home UI. The chat backend is not connected yet. `handleSubmit` is the
+	 * placeholder boundary for the future ARTI model service: nothing is sent
+	 * anywhere, and the composer itself reports the honest "not connected" state.
 	 */
-	let attachNote = $state('');
-
-	function handleSubmit(message: string): void {
-		// Placeholder boundary for the future ARTI model service. Nothing is
-		// sent anywhere; the composer shows the not-connected state to the user.
+	function handleSubmit(message: string, files: File[]): void {
 		void message;
-	}
-
-	function handleAttach(id: string, files: FileList): void {
-		const names = Array.from(files)
-			.map((f) => f.name)
-			.join(', ');
-		attachNote = `Selected for ${id}: ${names} — not uploaded yet.`;
+		void files;
 	}
 </script>
 
@@ -33,10 +22,7 @@
 
 	<div class="home-content">
 		<div class="composer-slot">
-			<ChatComposer onsubmit={handleSubmit} onattach={handleAttach} />
-			{#if attachNote}
-				<p class="attach-note" role="status">{attachNote}</p>
-			{/if}
+			<ChatComposer onsubmit={handleSubmit} />
 		</div>
 	</div>
 
@@ -53,35 +39,41 @@
 		overflow: hidden;
 	}
 
-	/* Absolute so it paints above the background/crest layers (z-index 0/1)
-	   while the flex flow keeps the composer area correctly sized. */
+	/* Sits above the background layer (z-index 0) while the flex flow keeps the
+	   composer area correctly sized. The composer is anchored to the lower-middle
+	   of the workspace: below the central wall branding and above the footer. */
 	.home-content {
 		position: relative;
 		z-index: var(--z-composer);
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: flex-end;
 		align-items: center;
-		padding: var(--space-6) var(--space-5) var(--space-3);
+		padding: var(--space-5) var(--space-5) 0;
 		min-height: 0;
 	}
 
 	.composer-slot {
 		width: 100%;
 		max-width: var(--composer-max-width);
+		margin-bottom: clamp(16px, 6vh, 72px);
 	}
 
-	.attach-note {
-		margin: var(--space-3) 0 0;
-		font-size: 12.5px;
-		color: var(--text-secondary);
-		text-align: center;
+	/* Short viewports: reduce the gap so the composer stays clear of the footer. */
+	@media (max-height: 720px) {
+		.composer-slot {
+			margin-bottom: var(--space-4);
+		}
 	}
 
 	@media (max-width: 900px) {
 		.home {
 			min-height: calc(100vh - var(--topbar-height));
+		}
+
+		.home-content {
+			padding: var(--space-5) var(--space-4) 0;
 		}
 	}
 </style>

@@ -1,38 +1,47 @@
 /**
  * Brand asset manifest.
  *
- * The three original brand assets are supplied by the project owner and must be
- * placed in `static/assets/`. This manifest is the single place that maps each
- * UI location to its file, so swapping in the real artwork is a one-line change
- * and no component hard-codes a path.
+ * The project owner supplies two original brand assets:
  *
- * No substitute artwork is generated here. While `ASSETS_READY` is false, the
- * components render an honest, clearly-labelled placeholder for each missing
- * layer and make no request for the file (so the console and network stay
- * clean). After adding the three files, set `ASSETS_READY = true`.
+ *   1. The golden phoenix emblem (sidebar brand lockup, left of `ARTI AI`).
+ *   2. The cinematic Home background, which already contains the architectural
+ *      interior AND the central crowned ARTI crest with its `IDEAS • CODE • IMPACT`
+ *      tagline baked into the artwork.
+ *
+ * Because the crest lives inside the background image, it is NOT a separate
+ * layer and is never recreated in HTML, SVG or CSS.
+ *
+ * This manifest is the single place that maps each UI location to its file, so
+ * swapping in the real artwork never requires editing a component. No substitute
+ * artwork is generated here: while a file is missing, its layer renders an
+ * honest, clearly-labelled placeholder and makes no request for the file (so the
+ * console and network stay clean).
+ *
+ * To enable a supplied asset, drop the file at the path below and set the
+ * matching `*_READY` flag to `true`.
  */
 
-/** The brand assets described by the approved Home UI reference. */
+/** The supplied brand assets described by the approved Home UI reference. */
 export interface BrandAssets {
-	/** Original phoenix emblem, shown beside the `ARTI AI` wordmark (sidebar header). */
+	/** Original golden phoenix emblem, shown beside the `ARTI AI` wordmark. */
 	phoenix: string;
-	/** Original crowned ARTI shield crest, shown on the central wall. */
-	crest: string;
-	/** Original Home environment (marble wall, city view, furniture). */
+	/** Original cinematic Home environment, including the central ARTI crest. */
 	background: string;
 }
 
 export const BRAND_ASSETS: BrandAssets = {
 	phoenix: '/assets/brand/arti-phoenix.png',
-	crest: '/assets/brand/arti-crest.png',
 	background: '/assets/background/home-background.jpg'
 };
 
-/**
- * Set to `true` once all three files above have been added to `static/assets/`.
- * Until then, placeholders are shown and no file requests are made.
- */
-export const ASSETS_READY = false;
+/** Set to `true` once the phoenix file exists at `BRAND_ASSETS.phoenix`. */
+export const PHOENIX_READY = false;
+
+/** Set to `true` once the background file exists at `BRAND_ASSETS.background`. */
+export const BACKGROUND_READY = false;
+
+/** True only when every supplied asset is present. */
+export const ASSETS_READY = PHOENIX_READY && BACKGROUND_READY;
 
 /** Short notice rendered inside each placeholder while an asset is missing. */
 export const PLACEHOLDER_NOTE = 'Original asset not supplied yet';

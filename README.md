@@ -17,18 +17,22 @@ claims otherwise.
 ## Required brand assets (must be supplied)
 
 The original brand artwork is **not** included in this repository and must be
-added by the owner. No substitute logos are generated. Drop the files at these
-exact paths:
+added by the owner. No substitute logos are generated. Two supplied assets are
+expected:
 
 | Purpose | Path | Shown in |
 | --- | --- | --- |
-| Original phoenix emblem | `static/assets/brand/arti-phoenix.png` | Sidebar header, left of `ARTI AI` |
-| Original crowned ARTI crest | `static/assets/brand/arti-crest.png` | Central wall |
-| Original Home background | `static/assets/background/home-background.jpg` | Full-bleed background |
+| Original phoenix emblem | `static/assets/brand/arti-phoenix.png` | Sidebar brand lockup, left of `ARTI AI` |
+| Original cinematic Home background | `static/assets/background/home-background.jpg` | Full-bleed background |
+
+The central crowned ARTI crest (`IDEAS • CODE • IMPACT`) is **baked into the
+supplied background image**. It is not a separate asset and is never recreated
+in HTML, SVG or CSS.
 
 Until a file exists, the corresponding layer shows a clearly-labelled neutral
-placeholder rather than a fabricated or broken image. Paths are declared once in
-`src/lib/data/brandAssets.ts`.
+placeholder rather than a fabricated or broken image. Paths and readiness flags
+are declared once in `src/lib/data/brandAssets.ts` (`PHOENIX_READY`,
+`BACKGROUND_READY`); set a flag to `true` after adding its file.
 
 ## Run
 
@@ -61,6 +65,10 @@ src/
     +page.svelte              Home UI
     [section]/                dynamic "coming soon" section pages
 static/
-  assets/brand/               phoenix + crest artwork (owner-supplied)
-  assets/background/          Home environment artwork (owner-supplied)
+  assets/brand/               phoenix artwork (owner-supplied)
+  assets/background/          Home environment artwork, incl. central crest (owner-supplied)
 ```
+
+After adding the files, set the matching readiness flags in
+`src/lib/data/brandAssets.ts` to `true` to swap the placeholders for the real
+artwork.

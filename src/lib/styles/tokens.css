@@ -1,41 +1,61 @@
 /* ARTI AI — design tokens.
    Aesthetic: restrained black-and-gold luxury, per the approved reference.
-   Every UI colour resolves through a token so the palette stays consistent. */
+   Every UI colour resolves through a token so the palette stays consistent.
+
+   The raw palette below mirrors the specification's starting tokens; the
+   semantic tokens further down map the interface onto it so no component
+   hard-codes a hex value. These values never recolour the supplied artwork —
+   the original images keep their own colour grading. */
 
 :root {
+	/* --- Raw specification palette --- */
+	--arti-black: #050505;
+	--arti-deep-black: #080807;
+	--arti-panel: #0b0d0e;
+	--arti-panel-soft: #101315;
+	--arti-gold: #c99a36;
+	--arti-champagne: #e5c16a;
+	--arti-gold-soft: #a98742;
+	--arti-ivory: #f3eee2;
+	--arti-muted: #b8ae98;
+	--arti-border: rgba(201, 154, 54, 0.35);
+	--arti-border-strong: rgba(229, 193, 106, 0.72);
+	--arti-shadow: rgba(0, 0, 0, 0.48);
+
 	/* --- Surfaces (near-black, warm-tinted) --- */
-	--surface-void: #050403;
-	--surface-sidebar: #0a0806;
-	--surface-sidebar-end: #070605;
-	--surface-panel: rgba(18, 15, 10, 0.74);
-	--surface-panel-solid: #12100b;
-	--surface-raised: rgba(30, 25, 16, 0.85);
-	--surface-input: rgba(10, 9, 6, 0.62);
+	--surface-void: var(--arti-black);
+	--surface-sidebar: #0a0908;
+	--surface-sidebar-end: #060605;
+	--surface-panel: rgba(11, 13, 14, 0.74);
+	--surface-panel-solid: var(--arti-panel);
+	--surface-raised: rgba(16, 19, 21, 0.85);
+	--surface-input: rgba(8, 10, 12, 0.6);
 
 	/* --- Gold accent ramp --- */
-	--gold: #c9a227;
-	--gold-bright: #f0d271;
-	--gold-deep: #8a6b1a;
-	--gold-soft: rgba(201, 162, 39, 0.28);
-	--gold-hair: rgba(201, 162, 39, 0.16);
-	--gold-glow: rgba(240, 210, 113, 0.32);
+	--gold: var(--arti-gold);
+	--gold-bright: var(--arti-champagne);
+	--gold-deep: var(--arti-gold-soft);
+	--gold-soft: rgba(201, 154, 54, 0.28);
+	--gold-hair: rgba(201, 154, 54, 0.16);
+	--gold-glow: rgba(229, 193, 106, 0.26);
 
 	/* --- Text --- */
-	--text-primary: #f4ecdb;
-	--text-secondary: #b3a487;
-	--text-muted: #7d7159;
+	--text-primary: var(--arti-ivory);
+	--text-secondary: var(--arti-muted);
+	--text-muted: #9a917e;
 	--text-on-gold: #1a1407;
 
 	/* --- Borders & focus --- */
-	--border-hair: rgba(201, 162, 39, 0.18);
-	--border-gold: rgba(201, 162, 39, 0.42);
+	--border-hair: rgba(201, 154, 54, 0.2);
+	--border-gold: var(--arti-border);
+	--border-strong: var(--arti-border-strong);
 	--border-soft: rgba(255, 255, 255, 0.07);
-	--focus-ring: #f0d271;
+	--focus-ring: var(--arti-champagne);
 
 	/* --- Shadows / glow --- */
-	--shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.62);
+	--shadow-panel: 0 18px 48px var(--arti-shadow);
 	--shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.45);
-	--glow-gold: 0 0 0 1px rgba(201, 162, 39, 0.35), 0 0 22px rgba(240, 210, 113, 0.18);
+	--glow-gold: 0 0 0 1px rgba(201, 154, 54, 0.32), 0 0 20px rgba(229, 193, 106, 0.13);
 
 	/* --- Spacing scale --- */
 	--space-1: 4px;
@@ -50,13 +70,14 @@
 	/* --- Radii --- */
 	--radius-sm: 8px;
 	--radius-md: 12px;
-	--radius-lg: 18px;
+	--radius-lg: 22px;
 	--radius-pill: 999px;
 
-	/* --- Layout metrics --- */
-	--sidebar-width: 264px;
-	--topbar-height: 68px;
-	--composer-max-width: 880px;
+	/* --- Layout metrics (primary desktop target: 1920x1080) --- */
+	--sidebar-width: 252px;
+	--sidebar-collapsed-width: 76px;
+	--topbar-height: 65px;
+	--composer-max-width: 772px;
 
 	/* --- Typography --- */
 	--font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -71,6 +92,7 @@
 	--z-topbar: 40;
 	--z-sidebar: 50;
 	--z-dropdown: 60;
+	--z-popover: 70;
 }
 
 /* Users who prefer reduced motion get a static interface. */
