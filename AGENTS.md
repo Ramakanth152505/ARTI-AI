@@ -97,6 +97,56 @@ lives in `src/lib/images` and its UI in `src/lib/components/Image*.svelte` and
 
 Commands: `npm run check:images` (puppeteer workspace checks; needs a dev server).
 
+## Shared Styles Library
+
+One catalogue serves both Images and Videos: `src/lib/shared/styles/` holds the
+media-neutral contracts (`types.ts`) and the data (`catalog/`, eleven spec
+categories A–K plus the preserved legacy image styles). It is data, not UI, so a
+new style or category is a change to the catalogue and never a UI rewrite.
+
+- `execution` records what is actually known about a style against the configured
+  models. Nothing is `available` while no model is connected; every authored style
+  defaults to `prompt-only`. Tests assert no style claims `available`.
+- There is no `preview` field anywhere: no preview artwork exists, so the UI shows
+  a deliberate text fallback rather than a fabricated thumbnail.
+- `StyleLibrary.svelte` is the one UI, parameterised by `media`. `ImageStyleLibrary`
+  and `VideoStyleLibrary` are thin wrappers that lock the media type, so the two
+  workspaces cannot drift apart.
+- Applying a style never starts generation and never silently overwrites an
+  existing prompt: the card reports the selection and the workspace asks how to
+  combine the guidance (insert / replace / append). `src/lib/images/styles.ts`
+  re-exports the shared catalogue, keeping the historic `IMAGE_STYLES` /
+  `STYLE_CATEGORIES` names working.
+
+## Videos module
+
+`/videos` is the AI film-production workspace: projects, recursive folders, series
+→ seasons → episodes, movies → parts, scenes → shots, a prompt chat, generation
+queue, library, drafts, assets and settings. Logic lives in `src/lib/videos` and
+its UI in `src/lib/components/Videos*.svelte` / `VideoComposer.svelte`.
+
+- Availability is read from `src/lib/videos/config.ts`
+  (`VITE_ARTI_VIDEO_ENDPOINT`, `VITE_ARTI_PROMPT_ENDPOINT`, `VITE_SUPABASE_*`).
+  Unset means generation is disabled with honest copy; no request is made and
+  nothing is fabricated. Capability flags default to false on purpose.
+- Model seams: `service/videoService.ts` and `service/videoPromptService.ts`
+  (provider-neutral contracts in their header comments). Both throw instead of
+  returning canned output.
+- Recursive folders: `tree.ts` holds the pure rules. `canMove` is the single gate
+  against a folder becoming its own descendant, and the migration enforces the
+  same rule in the database.
+- Persistence is `VideoRepository` (`persistence/repository.ts`); the live
+  implementation is browser-local keyed by workspace scope, with a Supabase
+  implementation swappable without touching components. Long jobs are staged and
+  resumable — a percentage is shown only when the backend reports one.
+- Requested values (what the user asked for) and produced values (what was
+  measured) are separate fields, so a lower-resolution file is never labelled as
+  native 16K.
+- Schema + RLS live in `supabase/migrations/`; media bytes stay in private object
+  storage and only references/metadata are stored in the database.
+
+Commands: `npm run check:videos` (puppeteer workspace checks; needs a dev server).
+
 ## Layout targets (verified at 1920x1080)
 
 Sidebar 252px (76px icon rail when collapsed), topbar 66px, composer <=768px wide

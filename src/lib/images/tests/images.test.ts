@@ -23,6 +23,7 @@ import {
         searchStyles,
         stylesInCategory
 } from '#lib/images/styles';
+import { categoryCounts as categoryCountsAcrossAll } from '#lib/shared/styles';
 import {
         applyStyleTemplate,
         composePrompt,
@@ -62,14 +63,17 @@ describe('style catalog integrity', () => {
         });
 
         it('covers every category with at least one style', () => {
-                const counts = categoryCounts();
+                // The shared catalogue spans both media; category coverage is asserted
+                // against the whole catalogue. A video-only category legitimately has
+                // no image-capable style, so the image subset is not used here.
+                const counts = categoryCountsAcrossAll();
                 for (const category of STYLE_CATEGORIES) {
                         expect(counts[category.id], category.id).toBeGreaterThan(0);
                 }
         });
 
         it('does not claim any style is verified, since no model is connected', () => {
-                expect(IMAGE_STYLES.every((s) => s.verified !== true)).toBe(true);
+                expect(IMAGE_STYLES.every((s) => s.execution !== 'available')).toBe(true);
         });
 
         it('does not invent preview images', () => {

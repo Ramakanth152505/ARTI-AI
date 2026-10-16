@@ -88,6 +88,15 @@
         --images-composer-min-height: 46px;
         --images-composer-max-height: 132px;
 
+        /* Videos workspace metrics. The studio is a three-region layout at desktop
+           width: a secondary navigation column, the working canvas, and an optional
+           context panel. */
+        --videos-nav-width: 216px;
+        --videos-context-width: 320px;
+        --videos-max-width: 768px;
+        --videos-composer-min-height: 46px;
+        --videos-composer-max-height: 150px;
+
         /* --- Typography --- */
         --font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
         --font-display: "Cinzel", "Trajan Pro", Georgia, "Times New Roman", serif;
