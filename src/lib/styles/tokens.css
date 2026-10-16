@@ -1,0 +1,81 @@
+/* ARTI AI — design tokens.
+   Aesthetic: restrained black-and-gold luxury, per the approved reference.
+   Every UI colour resolves through a token so the palette stays consistent. */
+
+:root {
+	/* --- Surfaces (near-black, warm-tinted) --- */
+	--surface-void: #050403;
+	--surface-sidebar: #0a0806;
+	--surface-sidebar-end: #070605;
+	--surface-panel: rgba(18, 15, 10, 0.74);
+	--surface-panel-solid: #12100b;
+	--surface-raised: rgba(30, 25, 16, 0.85);
+	--surface-input: rgba(10, 9, 6, 0.62);
+
+	/* --- Gold accent ramp --- */
+	--gold: #c9a227;
+	--gold-bright: #f0d271;
+	--gold-deep: #8a6b1a;
+	--gold-soft: rgba(201, 162, 39, 0.28);
+	--gold-hair: rgba(201, 162, 39, 0.16);
+	--gold-glow: rgba(240, 210, 113, 0.32);
+
+	/* --- Text --- */
+	--text-primary: #f4ecdb;
+	--text-secondary: #b3a487;
+	--text-muted: #7d7159;
+	--text-on-gold: #1a1407;
+
+	/* --- Borders & focus --- */
+	--border-hair: rgba(201, 162, 39, 0.18);
+	--border-gold: rgba(201, 162, 39, 0.42);
+	--border-soft: rgba(255, 255, 255, 0.07);
+	--focus-ring: #f0d271;
+
+	/* --- Shadows / glow --- */
+	--shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.62);
+	--shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.45);
+	--glow-gold: 0 0 0 1px rgba(201, 162, 39, 0.35), 0 0 22px rgba(240, 210, 113, 0.18);
+
+	/* --- Spacing scale --- */
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 12px;
+	--space-4: 16px;
+	--space-5: 24px;
+	--space-6: 32px;
+	--space-7: 48px;
+	--space-8: 64px;
+
+	/* --- Radii --- */
+	--radius-sm: 8px;
+	--radius-md: 12px;
+	--radius-lg: 18px;
+	--radius-pill: 999px;
+
+	/* --- Layout metrics --- */
+	--sidebar-width: 264px;
+	--topbar-height: 68px;
+	--composer-max-width: 880px;
+
+	/* --- Typography --- */
+	--font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+	--font-display: "Cinzel", "Trajan Pro", Georgia, "Times New Roman", serif;
+
+	/* --- Z-index layers (explicit stacking order) --- */
+	--z-background: 0;
+	--z-crest: 1;
+	--z-content: 10;
+	--z-footer: 12;
+	--z-composer: 20;
+	--z-topbar: 40;
+	--z-sidebar: 50;
+	--z-dropdown: 60;
+}
+
+/* Users who prefer reduced motion get a static interface. */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--motion-factor: 0;
+	}
+}
