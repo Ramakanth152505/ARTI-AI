@@ -71,11 +71,20 @@
 		const target = event.target as Node;
 		if (root && !root.contains(target)) open = false;
 	}
+
+	/** Escape closes the menu from anywhere inside the widget (trigger or menu). */
+	function onRootKeydown(event: KeyboardEvent): void {
+		if (event.key === 'Escape' && open) {
+			event.preventDefault();
+			closeMenu();
+		}
+	}
 </script>
 
 <svelte:document onpointerdown={onDocumentPointerDown} onfocusin={onDocumentFocusIn} />
 
-<div class="profile" bind:this={root}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="profile" bind:this={root} onkeydown={onRootKeydown}>
 	<button
 		type="button"
 		class="trigger"

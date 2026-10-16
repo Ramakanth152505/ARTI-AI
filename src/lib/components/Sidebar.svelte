@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import Icon from './Icon.svelte';
 	import { PRIMARY_NAV, SETTINGS_NAV, type NavItem } from '#lib/data/navigation';
-	import { BRAND_ASSETS, ASSETS_READY, PLACEHOLDER_NOTE } from '#lib/data/brandAssets';
+	import { BRAND_ASSETS, PHOENIX_READY, PLACEHOLDER_NOTE } from '#lib/data/brandAssets';
 	import { ui } from '#lib/state/uiState.svelte';
 
 	/** True when the current route matches the item's href. */
@@ -12,17 +12,28 @@
 	}
 
 	/**
-	 * The phoenix is supplied artwork. Until the file is added and
-	 * `ASSETS_READY` is set, a neutral placeholder is shown instead of a
-	 * fabricated logo or a broken-image glyph.
+	 * The phoenix is supplied artwork placed as-is beside the wordmark. Until the
+	 * file is added and `PHOENIX_READY` is set, a neutral placeholder is shown
+	 * instead of a fabricated logo or a broken-image glyph.
 	 */
-	const showPhoenix = ASSETS_READY;
+	const showPhoenix = PHOENIX_READY;
 </script>
 
-<aside class="sidebar" class:open={ui.sidebarOpen} aria-label="Primary">
+<aside
+	class="sidebar"
+	class:open={ui.sidebarOpen}
+	class:collapsed={ui.sidebarCollapsed}
+	aria-label="Primary"
+>
 	<div class="brand">
 		{#if showPhoenix}
-			<img class="brand-mark" src={BRAND_ASSETS.phoenix} alt="ARTI AI" width="40" height="40" />
+			<img
+				class="brand-mark"
+				src={BRAND_ASSETS.phoenix}
+				alt="ARTI AI"
+				width="40"
+				height="40"
+			/>
 		{:else}
 			<span
 				class="brand-mark is-empty"
@@ -34,7 +45,7 @@
 			</span>
 		{/if}
 		<span class="brand-text">
-			<span class="brand-name">ARTI <span class="brand-ai">AI</span></span>
+			<span class="brand-name">ARTI AI</span>
 			<span class="brand-tag">Ideas • Code • Impact</span>
 		</span>
 	</div>
@@ -48,6 +59,7 @@
 						class:active={isActive(item)}
 						href={item.href}
 						aria-current={isActive(item) ? 'page' : undefined}
+						title={ui.sidebarCollapsed ? item.label : undefined}
 						onclick={() => ui.closeSidebar()}
 					>
 						<span class="nav-icon"><Icon name={item.icon} size={19} /></span>
@@ -64,6 +76,7 @@
 			class:active={isActive(SETTINGS_NAV)}
 			href={SETTINGS_NAV.href}
 			aria-current={isActive(SETTINGS_NAV) ? 'page' : undefined}
+			title={ui.sidebarCollapsed ? SETTINGS_NAV.label : undefined}
 			onclick={() => ui.closeSidebar()}
 		>
 			<span class="nav-icon"><Icon name={SETTINGS_NAV.icon} size={19} /></span>
@@ -87,6 +100,7 @@
 		width: var(--sidebar-width);
 		background: linear-gradient(180deg, var(--surface-sidebar) 0%, var(--surface-sidebar-end) 100%);
 		border-right: 1px solid var(--border-hair);
+		overflow: hidden;
 	}
 
 	/* --- Brand header --- */
@@ -95,7 +109,7 @@
 		align-items: center;
 		gap: var(--space-3);
 		height: var(--topbar-height);
-		padding: 0 var(--space-5);
+		padding: 0 var(--space-4);
 		border-bottom: 1px solid var(--border-hair);
 		flex-shrink: 0;
 	}
@@ -121,6 +135,7 @@
 		display: flex;
 		flex-direction: column;
 		min-width: 0;
+		white-space: nowrap;
 	}
 
 	.brand-name {
@@ -128,12 +143,8 @@
 		font-size: 19px;
 		font-weight: 700;
 		letter-spacing: 0.06em;
-		color: var(--text-primary);
-		line-height: 1.1;
-	}
-
-	.brand-ai {
 		color: var(--gold-bright);
+		line-height: 1.12;
 	}
 
 	.brand-tag {
@@ -147,6 +158,7 @@
 	.nav-scroll {
 		flex: 1;
 		overflow-y: auto;
+		overflow-x: hidden;
 		padding: var(--space-4) var(--space-3);
 	}
 
@@ -177,7 +189,7 @@
 	}
 
 	.nav-item:hover {
-		background: rgba(201, 162, 39, 0.07);
+		background: rgba(201, 154, 54, 0.07);
 		color: var(--text-primary);
 	}
 
@@ -197,10 +209,10 @@
 
 	/* Active = restrained gold border + subtle highlighted background. */
 	.nav-item.active {
-		background: linear-gradient(90deg, rgba(201, 162, 39, 0.16), rgba(201, 162, 39, 0.04));
+		background: linear-gradient(90deg, rgba(201, 154, 54, 0.16), rgba(201, 154, 54, 0.04));
 		border-color: var(--border-gold);
 		color: var(--gold-bright);
-		box-shadow: inset 0 0 18px rgba(240, 210, 113, 0.08);
+		box-shadow: inset 0 0 18px rgba(229, 193, 106, 0.07);
 	}
 
 	.nav-item.active .nav-icon {
@@ -213,6 +225,26 @@
 		flex-shrink: 0;
 	}
 
+	/* --- Desktop icon rail --- */
+	.sidebar.collapsed {
+		width: var(--sidebar-collapsed-width);
+	}
+
+	.sidebar.collapsed .brand {
+		justify-content: center;
+		padding: 0;
+	}
+
+	.sidebar.collapsed .brand-text,
+	.sidebar.collapsed .nav-label {
+		display: none;
+	}
+
+	.sidebar.collapsed .nav-item {
+		justify-content: center;
+		gap: 0;
+	}
+
 	/* --- Overlay drawer (small screens only) --- */
 	.scrim {
 		position: fixed;
@@ -223,12 +255,30 @@
 	}
 
 	@media (max-width: 900px) {
-		.sidebar {
+		.sidebar,
+		.sidebar.collapsed {
 			position: fixed;
 			top: 0;
 			left: 0;
+			width: var(--sidebar-width);
 			transform: translateX(-100%);
 			transition: transform 220ms ease;
+		}
+
+		/* The drawer always shows full labels, even after a desktop collapse. */
+		.sidebar.collapsed .brand {
+			justify-content: flex-start;
+			padding: 0 var(--space-4);
+		}
+
+		.sidebar.collapsed .brand-text,
+		.sidebar.collapsed .nav-label {
+			display: initial;
+		}
+
+		.sidebar.collapsed .nav-item {
+			justify-content: flex-start;
+			gap: var(--space-3);
 		}
 
 		.sidebar.open {

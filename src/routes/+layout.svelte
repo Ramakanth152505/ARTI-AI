@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../lib/styles/global.css';
 	import Sidebar from '#lib/components/Sidebar.svelte';
+	import { ui } from '#lib/state/uiState.svelte';
 	import type { LayoutProps } from './$types';
 
 	let { children }: LayoutProps = $props();
@@ -11,7 +12,7 @@
 	<title>ARTI AI — Ideas. Code. Impact.</title>
 </svelte:head>
 
-<div class="app-shell">
+<div class="app-shell" class:collapsed={ui.sidebarCollapsed}>
 	<Sidebar />
 	<div class="app-main">{@render children()}</div>
 </div>
@@ -21,6 +22,11 @@
 		display: grid;
 		grid-template-columns: var(--sidebar-width) 1fr;
 		min-height: 100vh;
+		transition: grid-template-columns 200ms ease;
+	}
+
+	.app-shell.collapsed {
+		grid-template-columns: var(--sidebar-collapsed-width) 1fr;
 	}
 
 	.app-main {
@@ -33,8 +39,15 @@
 	/* Below the sidebar breakpoint, the sidebar becomes an overlay drawer and
 	   the main column takes the full width. */
 	@media (max-width: 900px) {
-		.app-shell {
+		.app-shell,
+		.app-shell.collapsed {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.app-shell {
+			transition: none;
 		}
 	}
 </style>
