@@ -43,6 +43,35 @@ No AI/chat/upload/voice/auth backend exists. Do not fake success. Magic Mode and
 the profile switcher are presentation-level preferences only; central "not
 connected" strings live in `src/lib/data/statusMessages.ts`.
 
+## Chats module
+
+`/chats` is the conversation workspace: history sidebar + conversation + opt-in
+context panel. Its logic lives in `src/lib/chats` and its UI in
+`src/lib/components/Chat*.svelte`.
+
+- Availability is never hard-coded. `src/lib/chats/config.ts` reads
+  `VITE_ARTI_CHAT_ENDPOINT` and `VITE_SUPABASE_*`; with neither set, the UI shows
+  the honest "not configured" states and no request is made.
+- The model seam is `src/lib/chats/service/chatService.ts` (SSE contract in the
+  header comment). It throws rather than returning canned text — never add fake
+  responses.
+- Persistence goes through `ChatRepository` (`src/lib/chats/persistence/`). The
+  live implementation is browser-local keyed by workspace scope; a
+  `supabaseRepository` swaps in without touching components. Server-side
+  authorization (RLS) is the real enforcement point, not the UI.
+- Message HTML is `marked` -> `DOMPurify`. Keep that order; never `{@html}` raw
+  model output.
+- Attachments, voice and tools have real validation/permission handling but no
+  backend, so they report unavailable rather than simulating success.
+
+Commands: `npm test` (Vitest unit tests) and `npm run check:layout` (puppeteer
+overflow check; needs a dev server). `scripts/check-interactions.mjs` smoke-tests
+search, pin persistence and the context panel against a running server.
+
+Note: `.chat-header` sits in its own stacking context (`backdrop-filter`). Its
+children's dropdowns stay above the scroller because the header carries
+`position: relative; z-index: 2`.
+
 ## Layout targets (verified at 1920x1080)
 
 Sidebar 252px (76px icon rail when collapsed), topbar 66px, composer <=768px wide
